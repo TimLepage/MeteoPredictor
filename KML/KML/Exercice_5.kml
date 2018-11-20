@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Chemin</name>
+<Placemark>
+<name>Chemin</name>
+<description>Chemin entre les villes.</description>
+<styleUrl>#yellowLineGreenPoly</styleUrl>
+<LineString>
+<extrude>1</extrude>
+<tessellate>1</tessellate>
+<altitudeMode>absolute</altitudeMode>
+<coordinates>2.3522219000000177,48.856614,55555
+4.351710300000036,50.8503396,55555
+13.404953999999975,52.52000659999999,55555
+12.496365500000024,41.9027835,55555
+-9.139336599999979,38.7222524,55555
+-3.7037901999999576,40.4167754,55555
+-0.12775829999998223,51.5073509,55555
+</coordinates></LineString></Placemark>
+</Document></kml>

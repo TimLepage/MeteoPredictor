@@ -1,0 +1,82 @@
+Projet données météo
+
+rendu : 7/12/2018
+
+prévision météo France : http://www.meteofrance.fr/
+
+donées libre : https://donneespubliques.meteofrance.fr/
+Prévisions court terme : https://donneespubliques.meteofrance.fr/?fond=rubrique&id_rubrique=30
+https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=131&id_rubrique=51
+
+3 types de grille de discrétisation 
+	- Arome 0.025° (2.5 km)
+	- Arome HD 0.01° (1.3 km)
+	- Arpège : global (long -180 +180  lat -90 90
+discrétisation  longitude (droite gauche  -   WEST -> EAST)
+		latitude (haut bas)
+
+
+météo France fait tourner ses algo de prévision tout le temps ! Donc à un moment donnée, nous avons accès à plusieurs modèles (celui de ce matin, celui d'hier, ....) 
+
+format : grib2 
+
+wgrib2 <nomfichier>   => contenu
+wgrib2 <nomfichier> -netcdf fifi.mc  => conversion netcdf
+wgrib2 <nomfichier> -match ":VGUST:" -netcdf toto.mc
+
+
+
+
+paraview : 
+
+replace fil value with nan !
+recalculer min max 
+selectionner une variable à afficher
+
+
+outil calculette - filtre calculator 
+UGRD_10maboveground*iHat+VGRD_10maboveground*jHat
+
+
+treshold seuil juste après importation
+extractsubset pour extraire une sous grille 
+calculator pour calculer le vent
+glyph afficher des flèches
+
+
+ligne de courant : champs de vecteur 
+
+	choix du des points de départ
+Stram Tracer
+
+
+Téléchargement des ressources depuis Météo FRANCE
+python RequeteAromeHD heuredelaprevision nomdupaquet
+ex : prévisions acutelles HD
+ex :  python RequeteAromeHD 0 SP1
+
+python DateDeLaPrevisionAromeHD.py 15
+Retourne l'heure de la prévision qui va etre necessaire pour une prévision dans N heure
+ 
+
+RUNME_IMAGE.sh 3: telecharge les données, transformation paraview, conversion KML 
+
+
+
+PARAVIEW SCRIPT File -> save State : .pvsm pour revenir dans la fenêtre graphique ! 
+				     .py sauvegarde sous forme de script python -> paramètres par défauts 
+
+pvpython monscript.py 
+-> supprime les lignes qui ne fonctionnent pas 
+ajoute Interact() à la fin du script pour visualiser le résultat
+WriteImage(img.png) pour save l'image
+
+parametre netcdf (nom du fichier) dans le script paraview  
+ajouter courbe isovaleur temp (temp minimal de la courbe isovaleur, nombre de courbe isovaleur, delta entre deux courbes isovaleurs). 
+ex : pvpython Monscript.py toto.nc 20 5 2 
+
+isovaleur : surace -> compute scalars -> choix temp
+
+
+
+créer cartes de couleurs (températures, humidité,

@@ -2,10 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+METEO/METEO_VISUALISATION_SIMPLE/DATA
 # C extensions
 *.so
-
+*.nc
+ParaviewotherData/
 # Distribution / packaging
 .Python
 build/

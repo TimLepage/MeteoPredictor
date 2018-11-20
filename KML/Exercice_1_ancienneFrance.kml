@@ -1,0 +1,13 @@
+<GroundOverlay>
+<name>Ancienne France</name>
+<Icon>
+<href>carte.jpg</href>
+</Icon>
+<LatLonBox>
+<north>51.14582064171803</north>
+<south>42.22993231551517</south>
+<east>10.79288010970161</east>
+<west>-6.151180487455577</west>
+</LatLonBox>"
+<color>a0ffffff</color>
+</GroundOverlay>
