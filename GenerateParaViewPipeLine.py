@@ -11,7 +11,8 @@ paraview.simple._DisableFirstRenderCameraReset()
 
 # Create a new 'Render View'
 renderView1 = CreateView('RenderView')
-renderView1.ViewSize = [610, 680]
+Monechelle = 0.5
+renderView1.ViewSize = [(int)(2801*Monechelle),(int) (1791*Monechelle)]
 renderView1.InteractionMode = '2D'
 renderView1.AxesGrid = 'GridAxes3DActor'
 renderView1.CenterOfRotation = [1.999999999987267, 46.45, 0.0]
@@ -112,3 +113,4 @@ streamTracerDisplay = Show(streamTracer, renderView1)
 # trace defaults for the display properties.
 streamTracerDisplay.ColorArrayName = ['POINTS', '']
 streamTracerDisplay.GlyphType = 'Arrow'
+WriteImage("TTTT.png")
