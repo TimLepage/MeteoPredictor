@@ -1,6 +1,6 @@
-#!/bin/bash
+# !/bin/bash
 if [ "$#" -eq 0 ]; then
-        echo "vous devez donnez le nombre d'heure a partir du moment actuel pour lequel vous voulez la prevision"
+        echo "Vous devez donner le nombre d'heure a partir du moment actuel pour lequel vous voulez la prevision"
 	echo
 	exit
 else
@@ -11,15 +11,30 @@ fi
 echo "=== TELECHARGEMENT DES DONNEES DE SIMULATION A METEOFRANCE"
 echo
 
-NomDuFichierMeteoFrance=`python PYTHON/RequeteAromeHD.py $1 SP1`
+i=0
+
+cd KML
+rm timelaps.kml
+touch timelaps.kml
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<kml xmlns=\"http://www.opengis.net/kml/2.2\">
+  <Folder>
+    <name>Prévision météo</name>
+    <description>Prévision température</description>" >> timelaps.kml
+cd ..
+
+while [ $i -lt $1 ]
+do
+
+NomDuFichierMeteoFrance=`python PYTHON/RequeteAromeHD.py $i SP1`
 rc=$?
 if ! [ $rc == 0 ]; then
 	echo "LE CHARGEMENT DU FICHIER NE S EST PAS CORRECTEMENT EFFECTUE"
 	exit 1
 fi
 
-DateDeLaPrevision=`python PYTHON/DateDeLaPrevisionAromeHD.py $1`
-DateDuRun=`python PYTHON/DateDuRunAromeHD.py $1`
+DateDeLaPrevision=`python PYTHON/DateDeLaPrevisionAromeHD.py $i`
+DateDuRun=`python PYTHON/DateDuRunAromeHD.py $i`
 if [ -e  $NomDuFichierMeteoFrance ]; then
 	mv $NomDuFichierMeteoFrance DATA
 fi
@@ -33,28 +48,6 @@ echo "LES DONNEES DE SIMULATION SONT SAUVEES DANS LE FICHIER DATA/$NomDuFichierM
 echo
 
 
-
-
-NomDuFichierMeteoFrance=`python PYTHON/RequeteAromeHD.py $1+1 SP1`
-rc=$?
-if ! [ $rc == 0 ]; then
-	echo "LE CHARGEMENT DU FICHIER NE S EST PAS CORRECTEMENT EFFECTUE"
-	exit 1
-fi
-
-DateDeLaPrevision=`python PYTHON/DateDeLaPrevisionAromeHD.py $1`
-DateDuRun=`python PYTHON/DateDuRunAromeHD.py $1`
-if [ -e  $NomDuFichierMeteoFrance ]; then
-	mv $NomDuFichierMeteoFrance DATA
-fi
-
-if ! [ -e DATA/$NomDuFichierMeteoFrance ]; then
-	echo "LE CHARGEMENT DU FICHIER NE S EST PAS CORRECTEMENT EFFECTUE"
-	exit 1
-fi
-
-echo "LES DONNEES DE SIMULATION SONT SAUVEES DANS LE FICHIER DATA/$NomDuFichierMeteoFrance"
-echo
 # ==================================================================================================
 echo "=== CONVERSION EN NC DES DONNEES METEOFRANCE"
 echo
@@ -88,15 +81,9 @@ echo
 if [ -e KML/IMAGES/$NomDuFichierMeteoFrance.nc.png ]; then
 	echo "L IMAGE EXISTE DEJA"
 else
-#  /home/terrier/srilm/ParaView-5.6.0-MPI-Linux-64bit/bin/pvpython PYTHON/ScriptTest.py DATA/$NomDuFichierMeteoFrance.nc
-/home/terrier/srilm/ParaView-5.6.0-MPI-Linux-64bit/bin/pvpython PYTHON/VisualisationLigneVent.py DATA/$NomDuFichierMeteoFrance.nc
-/home/terrier/srilm/ParaView-5.6.0-MPI-Linux-64bit/bin/pvpython PYTHON/VisualisationLigneVentTemperature.py DATA/$NomDuFichierMeteoFrance.nc
-/home/terrier/srilm/ParaView-5.6.0-MPI-Linux-64bit/bin/pvpython PYTHON/VisualisationTemperature.py DATA/$NomDuFichierMeteoFrance.nc
-/home/terrier/srilm/ParaView-5.6.0-MPI-Linux-64bit/bin/pvpython PYTHON/VisualisationVentTemperature.py DATA/$NomDuFichierMeteoFrance.nc
 
-#	pvpython --force-offscreen-rendering PYTHON/VisuAvecTemperature.py DATA/$NomDuFichierMeteoFrance.nc
-#	pvpython --force-offscreen-rendering PYTHON/VisuAvecVentEtTemperature.py DATA/$NomDuFichierMeteoFrance.nc
-#	pvpython --force-offscreen-rendering PYTHON/VisuAvecVentSeulement.py DATA/$NomDuFichierMeteoFrance.nc
+/home/terrier/srilm/ParaView-5.6.0-MPI-Linux-64bit/bin/pvpython PYTHON/VisualisationTemperatureTemporel.py DATA/$NomDuFichierMeteoFrance.nc $i
+
 	rc=$?
 
 	if ! [ $rc == 0 ]; then
@@ -104,39 +91,66 @@ else
 		exit 1
 	fi
 
-	if ! [ -e DATA/$NomDuFichierMeteoFrance.nc.png ]; then
-		echo "PARAVIEW N A PAS PU CALCULER L IMAGE"
+	if ! [ -e DATA/$NomDuFichierMeteoFrance.nc.temperature.$i.png ]; then
+		echo "PARAVIEW N A PAS PU CALCULER L IMAGE ZZZ DATA/$NomDuFichierMeteoFrance.nc.$i.png"
 		exit 1
 	fi
-	mv DATA/$NomDuFichierMeteoFrance.nc.png KML/IMAGES
-	convert -trim -define png:color-type=6 KML/IMAGES/$NomDuFichierMeteoFrance.nc.png KML/IMAGES/$NomDuFichierMeteoFrance.nc.png
+	mv DATA/$NomDuFichierMeteoFrance.nc.temperature.$i.png KML/IMAGES
+	convert -trim -define png:color-type=6 KML/IMAGES/$NomDuFichierMeteoFrance.nc.temperature.$i.png KML/IMAGES/$NomDuFichierMeteoFrance.nc.temperature.$i.png
 	if ! [ $rc == 0 ]; then
 		echo "L IMAGE N A PAS PU ETRE TRAITEE PAR IMAGEMAGICK"
 		exit 1
 	fi
 fi
 
-echo "L IMAGE EST SAUVEE DANS LE FICHIER KML/IMAGES/$NomDuFichierMeteoFrance.nc.png"
+echo "L IMAGE EST SAUVEE DANS LE FICHIER KML/IMAGES/$NomDuFichierMeteoFrance.nc.$i.png"
 echo
+
+cd KML
+echo "<GroundOverlay>
+	<TimeStamp>
+	<when> $DateDeLaPrevision </when>
+	</TimeStamp>
+      <name>RUN_DU_$DateDuRun</name>
+      <!-- <color>96ffffff</color> -->
+      <!-- <color>ffffffff</color> -->
+<Icon><href>
+<![CDATA[./IMAGES/$NomDuFichierMeteoFrance.nc.temperature.$i.png]]></href>
+      </Icon>
+      <LatLonBox>
+        <north>55.4</north>
+        <south>37.5</south>
+        <west>-12</west>
+        <east>16</east>
+        <rotation>0</rotation>
+      </LatLonBox>
+    </GroundOverlay>" >> timelaps.kml
+cd ..
+
+
+i=$((i+1))
+
+done
 
 # ==================================================================================================
 echo "=== CREATION DU FICHIER KML POUR GOOGLE EARTH"
 echo
-cat KML/templateKMZ.kml | sed "s/ICILEFICHIER/$NomDuFichierMeteoFrance.nc.png/g" > tmp.kml
-cat tmp.kml | sed "s/ICILENOM/RUN_DU_$DateDuRun/g" > tmp1.kml
-cat tmp1.kml | sed "s/ICILADATEDELAPREVISION/$DateDeLaPrevision/g" > KML/$NomDuFichierMeteoFrance.nc.png.kml
-rm tmp.kml tmp1.kml
 
-echo "LE FICHIER KML KML/$NomDuFichierMeteoFrance.nc.png.kml PEUT ETRE OUVERT AVEC GOOGLE EARTH"
+cd KML
+  echo "  </Folder>
+</kml>" >> timelaps.kml
+cd ..
+
+echo "LE FICHIER KML KML/timelaps.kml PEUT ETRE OUVERT AVEC GOOGLE EARTH"
 echo
 
 # ==================================================================================================
 echo "=== CREATION DE L ARCHIVE KMZ POUR GOOGLE EARTH"
 echo
 
-cd KML; zip $NomDuFichierMeteoFrance.nc.png.kmz IMAGES/$NomDuFichierMeteoFrance.nc.png $NomDuFichierMeteoFrance.nc.png.kml
+cd KML; zip timelaps.kmz IMAGES/ timelaps.kml
 
-echo "LE FICHIER KMZ KML/$NomDuFichierMeteoFrance.nc.png.kmz PEUT ETRE OUVERT AVEC GOOGLE EARTH"
+echo "LE FICHIER KMZ KML/timelaps.kmz PEUT ETRE OUVERT AVEC GOOGLE EARTH"
 echo
 
 exit 0
