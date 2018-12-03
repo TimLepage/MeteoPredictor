@@ -56,7 +56,7 @@ calculWind.Function = 'iHat*UGRD_10maboveground+jHat*VGRD_10maboveground'
 # create a new 'Glyph'
 arrows = Glyph(Input=calculWind,
     GlyphType='2D Glyph')
-arrows.Scalars = ['POINTS', 'None']
+#arrows.Scalars = ['POINTS', 'None']
 arrows.Vectors = ['POINTS', 'Wind']
 arrows.ScaleFactor = 0.4
 arrows.GlyphMode = 'All Points'

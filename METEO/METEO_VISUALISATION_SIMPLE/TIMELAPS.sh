@@ -32,6 +32,29 @@ fi
 echo "LES DONNEES DE SIMULATION SONT SAUVEES DANS LE FICHIER DATA/$NomDuFichierMeteoFrance"
 echo
 
+
+
+
+NomDuFichierMeteoFrance=`python PYTHON/RequeteAromeHD.py $1+1 SP1`
+rc=$?
+if ! [ $rc == 0 ]; then
+	echo "LE CHARGEMENT DU FICHIER NE S EST PAS CORRECTEMENT EFFECTUE"
+	exit 1
+fi
+
+DateDeLaPrevision=`python PYTHON/DateDeLaPrevisionAromeHD.py $1`
+DateDuRun=`python PYTHON/DateDuRunAromeHD.py $1`
+if [ -e  $NomDuFichierMeteoFrance ]; then
+	mv $NomDuFichierMeteoFrance DATA
+fi
+
+if ! [ -e DATA/$NomDuFichierMeteoFrance ]; then
+	echo "LE CHARGEMENT DU FICHIER NE S EST PAS CORRECTEMENT EFFECTUE"
+	exit 1
+fi
+
+echo "LES DONNEES DE SIMULATION SONT SAUVEES DANS LE FICHIER DATA/$NomDuFichierMeteoFrance"
+echo
 # ==================================================================================================
 echo "=== CONVERSION EN NC DES DONNEES METEOFRANCE"
 echo

@@ -21,7 +21,7 @@ météo France fait tourner ses algo de prévision tout le temps ! Donc à un mo
 format : grib2 
 
 wgrib2 <nomfichier>   => contenu
-wgrib2 <nomfichier> -netcdf fifi.mc  => conversion netcdf
+wgrib2 <nomfichier> -netcdf fifi.nc  => conversion netcdf
 wgrib2 <nomfichier> -match ":VGUST:" -netcdf toto.mc
 
 

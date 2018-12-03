@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Folder>
+    <name>Temperature</name>
+    <description>Temperature</description>
+    <GroundOverlay>
+	<TimeStamp>
+	<when> 2018-12-01T17:00:00 </when>
+	</TimeStamp>
+      <name>Temperature</name>
+      <!-- <color>96ffffff</color> -->
+      <!-- <color>ffffffff</color> -->
+<Icon><href>
+<![CDATA[./IMAGES/AromeHD_SP1_DateRun_2018-12-01T06:00:00_DatePrev_2018-12-01T17:00:00.grib2.nc.temperature.png]]></href>
+      </Icon>
+      <LatLonBox>
+        <north>55.4</north>
+        <south>37.5</south>
+        <west>-12</west>
+        <east>16</east>
+        <rotation>0</rotation>
+      </LatLonBox>
+    </GroundOverlay>
+  </Folder>
+</kml>
